@@ -1,25 +1,49 @@
 use std::io;
-
+use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() { //comments work like c or c++
-    println!("Guess the number!");
+    let mut user_finished: bool = false;
 
-    let secret_number = rand::thread_rng().gen_range(1..100);
+    while !user_finished {
 
-    println!("Please input your guess.");
+        println!("Guess the number!");
 
-    let mut guess = String::new();
+        let secret_number = rand::thread_rng().gen_range(1..100);
 
-    io::stdin()
-        .read_line(&mut guess)
-        .expect("Failed to read line");
+        println!("Please input your guess.");
 
-    println!("The Secret Number is : {}", secret_number);
+        let mut guess = String::new();
 
-    println!("You guessed: {}", guess);
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read line");
 
+        println!("The Secret Number is : {}", secret_number);
 
+        println!("You guessed: {}", guess);
 
+        let guess: u32 = guess.trim().parse().expect("Please type a number!");
 
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too Small!"),
+            Ordering::Greater => println!("Too Big!"),
+            Ordering::Equal => println!("You win!")
+        }
+
+        println!("Continue Playing?(1 for yes 2 for no)");
+
+        let mut answer: String = String::new();
+
+        io::stdin()
+            .read_line(&mut answer)
+            .expect("Failed to read line!");
+
+        
+        let answer: u32 = answer.trim().parse().expect("Please Type 1 or 2!");
+
+        if answer == 2 {
+            user_finished = true;
+        }
+    }
 }
